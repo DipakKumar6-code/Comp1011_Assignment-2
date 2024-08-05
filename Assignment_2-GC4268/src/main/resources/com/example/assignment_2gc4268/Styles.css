@@ -1,0 +1,52 @@
+/* styles.css */
+.anchor-pane {
+    -fx-padding: 10;
+    -fx-background-color: #f0f0f0;
+}
+
+#rootPane{
+    -fx-background-color: transparent;
+}
+
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+}
+
+.button {
+    -fx-background-color: #0078d4;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 5;
+}
+
+.button:hover {
+    -fx-background-color: #005a9e;
+}
+
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.table-view {
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+}
+
+#backgroundImg {
+    -fx-background-color: transparent;
+    -fx-opacity: 0.47;
+}
+
+#weatherTable{
+    -fx-font-family: "Times New Roman";
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+}
+

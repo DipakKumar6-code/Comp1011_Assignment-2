@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane fx:id="rootPane" prefHeight="545.0" prefWidth="656.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment_2gc4268.Controllers.WeatherController">
+    <ImageView fx:id="backgroundImg" fitWidth="656.0" fitHeight="545.0" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@images/weather.jpeg" />
+        </image>
+    </ImageView>
+    <TextField fx:id="cityInput" layoutX="13.0" layoutY="21.0" promptText="Enter city name" />
+    <Button fx:id="getWeatherInfoButton" layoutX="195.0" layoutY="22.0" onAction="#handleGetWeatherInfo" text="Get Weather Info" />
+    <Label fx:id="feedbackLabel" alignment="CENTER" layoutX="3.0" layoutY="50.0" prefHeight="28.0" prefWidth="649.0" text="Weather Feedbacks" visible="false" />
+    <TableView fx:id="weatherTable" layoutX="13.0" layoutY="78.0" prefHeight="407.0" prefWidth="631.0">
+        <columns>
+            <TableColumn fx:id="dateColumn" text="Date" />
+            <TableColumn fx:id="cityColumn" prefWidth="150" text="City" />
+            <TableColumn fx:id="tempColumn" prefWidth="100" text="Temperature" />
+            <TableColumn fx:id="humidityColumn" prefWidth="100" text="Humidity" />
+            <TableColumn fx:id="precipitationColumn" prefWidth="120" text="Precipitation" />
+        </columns>
+    </TableView>
+    <Button fx:id="detailWeatherInfoBtn" layoutX="249.0" layoutY="498.0" onAction="#weatherDetailsByDate" text="View Weather Info by Date" />
+</AnchorPane>
