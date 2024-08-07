@@ -1,38 +1,32 @@
 package com.example.assignment_2gc4268.Model;
 
+/**
+ * Represents weather data for a specific city and date.
+ */
 public class Weather {
-    private String cityName;
-    private double currentTemperature;
-    private double currentHumidity;
-    private double currentPrecipitation;
-    private String forecastDate;
-    private double windKph;
-    private int dailyRain;
-    private double maxTemperature;
-    private double minTemperature;
-    private String condition;
-    private int cityUV;
 
-    public int getCityUV() {
-        return cityUV;
-    }
+    private String cityName;              // Name of the city
+    private double currentTemperature;    // Current temperature in Celsius
+    private double currentHumidity;       // Current humidity percentage
+    private double currentPrecipitation;  // Current precipitation in mm
+    private String forecastDate;          // Date of the weather forecast
+    private double windKph;               // Wind speed in kilometers per hour
+    private int dailyRain;                // Daily rain amount in mm
+    private double maxTemperature;        // Maximum temperature for the day in Celsius
+    private double minTemperature;        // Minimum temperature for the day in Celsius
+    private String condition;             // Weather condition description (e.g., sunny, rainy)
+    private int cityUV;                   // UV index for the city
 
-    public void setCityUV(int cityUV) {
-        this.cityUV = cityUV;
-    }
+    // Default constructor
+    public Weather() {}
 
-    public double getWindKph() {
-        return windKph;
-    }
-
-    public void setWindKph(double windKph) {
-        this.windKph = windKph;
-    }
-
-
-    public Weather(){}
-
-    public Weather(String cityName, double currentTemperature, double currentHumidity, double currentPrecipitation, String forecastDate, double windKph, double minTemperature, double maxTemperature, int dailyRain, String condition, int cityUV){
+    /**
+     * Parameterized constructor to initialize all weather attributes.
+     */
+    public Weather(String cityName, double currentTemperature, double currentHumidity,
+                   double currentPrecipitation, String forecastDate, double windKph,
+                   double minTemperature, double maxTemperature, int dailyRain,
+                   String condition, int cityUV) {
         setCityName(cityName);
         setCurrentTemperature(currentTemperature);
         setCurrentHumidity(currentHumidity);
@@ -45,6 +39,8 @@ public class Weather {
         setCondition(condition);
         setCityUV(cityUV);
     }
+
+    // Getters and setters for each attribute
 
     public String getCityName() {
         return cityName;
@@ -116,5 +112,21 @@ public class Weather {
 
     public void setCondition(String condition) {
         this.condition = condition;
+    }
+
+    public int getCityUV() {
+        return cityUV;
+    }
+
+    public void setCityUV(int cityUV) {
+        this.cityUV = cityUV;
+    }
+
+    public double getWindKph() {
+        return windKph;
+    }
+
+    public void setWindKph(double windKph) {
+        this.windKph = windKph;
     }
 }
