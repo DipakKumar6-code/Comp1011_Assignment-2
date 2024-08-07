@@ -40,7 +40,7 @@ public class Weather {
         setCityUV(cityUV);
     }
 
-    // Getters and setters for each attribute
+    // Getters and setters for each attribute of weather app
 
     public String getCityName() {
         return cityName;
