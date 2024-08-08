@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="656.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assignment_2gc4268.Controllers.DetailWeatherInfoController">
     <children>
-        <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+        <SplitPane dividerPositions="0.5" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="369.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
@@ -19,7 +19,7 @@
                         <Label fx:id="rainChanceLabel" alignment="CENTER" layoutX="10" layoutY="170" />
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="475.0" prefWidth="298.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="363.0" prefWidth="324.0">
                     <children>
                         <Label fx:id="windKphLabel" alignment="CENTER" layoutX="10" layoutY="10" />
                         <Label fx:id="minTempLabel" alignment="CENTER" layoutX="10" layoutY="50" />
@@ -30,10 +30,15 @@
                 </AnchorPane>
             </items>
         </SplitPane>
-        <Button fx:id="backButton" layoutX="276.0" layoutY="486.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="103.0" onAction="#handleBackButton" text="Back">
+        <Button fx:id="backButton" layoutX="276.0" layoutY="475.0" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="33.0" prefWidth="103.0" text="Back">
             <font>
                 <Font name="Arial" size="14.0" />
             </font>
         </Button>
+      <Label fx:id="detailWeatherLabel" alignment="CENTER" layoutX="7.0" layoutY="18.0" prefHeight="33.0" prefWidth="639.0" text="Weather">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
