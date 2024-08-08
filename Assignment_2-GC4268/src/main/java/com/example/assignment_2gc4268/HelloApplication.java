@@ -6,7 +6,6 @@ import com.example.assignment_2gc4268.Model.Weather;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -28,7 +27,7 @@ public class HelloApplication extends Application {
         AnchorPane weatherView = weatherLoader.load();
         weatherScene = new Scene(weatherView);
 
-        // Load DetailView.fxml for future use
+        // Load DetailView.fxml but do not set it initially
         FXMLLoader detailLoader = new FXMLLoader(getClass().getResource("MoreWeatherView.fxml"));
         AnchorPane detailView = detailLoader.load();
         detailScene = new Scene(detailView);
@@ -37,10 +36,13 @@ public class HelloApplication extends Application {
         primaryStage.setScene(weatherScene);
         primaryStage.show();
 
-        // Optionally: Pass the Scene or Stage to controllers if needed
+        // Initialize controllers
         WeatherController weatherController = weatherLoader.getController();
-        DetailWeatherInfoController detailedController = detailLoader.getController();
-        weatherController.setDetailController(detailedController);
+        DetailWeatherInfoController detailController = detailLoader.getController();
+
+        // Pass the app instance to controllers
+        weatherController.setWeatherApp(this);
+        detailController.setWeatherApp(this);
     }
 
     public void showWeatherView() {
@@ -48,12 +50,21 @@ public class HelloApplication extends Application {
     }
 
     public void showDetailView(Weather weather) {
-        DetailWeatherInfoController detailedController = (DetailWeatherInfoController) ((FXMLLoader) detailScene.getRoot().getProperties().get("controller")).getController();
-        detailedController.setWeatherDetails(weather);
-        primaryStage.setScene(detailScene);
+        try {
+            FXMLLoader detailLoader = new FXMLLoader(getClass().getResource("MoreWeatherView.fxml"));
+            AnchorPane detailView = detailLoader.load();
+            DetailWeatherInfoController detailController = detailLoader.getController();
+            detailController.setWeatherDetails(weather);
+            detailController.setWeatherApp(this);
+            Scene detailScene = new Scene(detailView);
+            primaryStage.setScene(detailScene);
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle the exception appropriately
+        }
     }
 
     public static void main(String[] args) {
         launch();
     }
 }
+
