@@ -15,7 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import com.example.assignment_2gc4268.Model.*;
+import com.example.assignment_2gc4268.Model.Weather;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,58 +25,59 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for managing weather data and interactions in the main weather view.
+ */
 public class WeatherController {
 
     @FXML
-    private TextField cityInput;
+    private TextField cityInput;  // Input field for city name
 
     @FXML
-    private TableView<Weather> weatherTable;
+    private TableView<Weather> weatherTable;  // Table to display weather data
 
     @FXML
-    private TableColumn<Weather, String> dateColumn;
+    private TableColumn<Weather, String> dateColumn;  // Column for date
+    @FXML
+    private TableColumn<Weather, String> cityColumn;  // Column for city name
+    @FXML
+    private TableColumn<Weather, Double> tempColumn;  // Column for temperature
+    @FXML
+    private TableColumn<Weather, Double> humidityColumn;  // Column for humidity
+    @FXML
+    private TableColumn<Weather, Double> precipitationColumn;  // Column for precipitation
 
     @FXML
-    private TableColumn<Weather, String> cityColumn;
+    private Button getWeatherInfoButton;  // Button to fetch weather info
+    @FXML
+    private Button getDetailedWeatherInfoButton;  // Button to view detailed weather info
 
     @FXML
-    private TableColumn<Weather, Double> tempColumn;
+    private Label feedbackLabel;  // Label to display feedback messages
 
-    @FXML
-    private TableColumn<Weather, Double> humidityColumn;
+    private ObservableList<Weather> weatherData = FXCollections.observableArrayList();  // Observable list for weather data
+    private Gson gson = new Gson();  // Gson instance for JSON parsing
+    private HelloApplication app;  // Reference to the main application
 
-    @FXML
-    private TableColumn<Weather, Double> precipitationColumn;
-
-    @FXML
-    private Button getWeatherInfoButton;
-
-    @FXML
-    private Button getDetailedWeatherInfoButton;
-
-    @FXML
-    private Label feedbackLabel;
-
-    private ObservableList<Weather> weatherData = FXCollections.observableArrayList();
-    private Gson gson = new Gson();
-    private HelloApplication app;
-
+    /**
+     * Initializes the view and sets up the table columns.
+     */
     @FXML
     public void initialize() {
-        // Initialize columns
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("forecastDate"));
         cityColumn.setCellValueFactory(new PropertyValueFactory<>("cityName"));
         tempColumn.setCellValueFactory(new PropertyValueFactory<>("currentTemperature"));
         humidityColumn.setCellValueFactory(new PropertyValueFactory<>("currentHumidity"));
         precipitationColumn.setCellValueFactory(new PropertyValueFactory<>("currentPrecipitation"));
 
-        // Bind the weather data to the table
-        weatherTable.setItems(weatherData);
-
-        // Hide the feedback label initially
-        feedbackLabel.setVisible(false);
+        weatherTable.setItems(weatherData);  // Bind data to the table
+        feedbackLabel.setVisible(false);  // Hide feedback label initially
     }
 
+    /**
+     * Handles the event when the "Get Weather Info" button is clicked.
+     * Fetches weather data based on the city name entered.
+     */
     @FXML
     private void handleGetWeatherInfo(ActionEvent event) {
         String cityName = cityInput.getText();
@@ -87,13 +88,19 @@ public class WeatherController {
                 showFeedback("No weather data available for the entered city.");
             } else {
                 weatherData.addAll(fetchedWeatherData);
-                hideFeedback(); // Hide feedback if data is available
+                hideFeedback();  // Hide feedback if data is available
             }
         } else {
             showFeedback("Please enter a city name.");
         }
     }
 
+    /**
+     * Fetches weather data from the API for the given city name.
+     *
+     * @param cityName the name of the city
+     * @return a list of weather data
+     */
     private List<Weather> fetchWeatherData(String cityName) {
         String apiKey = "022136477bd44954982185357243007";
         String apiUrl = "https://api.weatherapi.com/v1/forecast.json?key=" + apiKey + "&q=" + cityName + "&days=10";
@@ -110,7 +117,6 @@ public class WeatherController {
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 InputStreamReader reader = new InputStreamReader(conn.getInputStream());
                 JsonObject dataObj = JsonParser.parseReader(reader).getAsJsonObject();
-
                 JsonObject forecastObj = dataObj.getAsJsonObject("forecast");
                 JsonArray forecastDaysArray = forecastObj.getAsJsonArray("forecastday");
 
@@ -119,24 +125,16 @@ public class WeatherController {
                     String date = dayObj.get("date").getAsString();
                     JsonObject dayDetails = dayObj.getAsJsonObject("day");
 
-                    double temperature = dayDetails.has("avgtemp_c") && !dayDetails.get("avgtemp_c").isJsonNull()
-                            ? dayDetails.get("avgtemp_c").getAsDouble() : 0.0;
-                    double humidity = dayDetails.has("avghumidity") && !dayDetails.get("avghumidity").isJsonNull()
-                            ? dayDetails.get("avghumidity").getAsDouble() : 0.0;
-                    double precipitation = dayDetails.has("totalprecip_mm") && !dayDetails.get("totalprecip_mm").isJsonNull()
-                            ? dayDetails.get("totalprecip_mm").getAsDouble() : 0.0;
-                    double windKPH = dayDetails.has("maxwind_kph") && !dayDetails.get("maxwind_kph").isJsonNull()
-                            ? dayDetails.get("maxwind_kph").getAsDouble() : 0.0;
-                    double minTemp = dayDetails.has("mintemp_c") && !dayDetails.get("mintemp_c").isJsonNull()
-                            ? dayDetails.get("mintemp_c").getAsDouble() : 0.0;
-                    double maxTemp = dayDetails.has("maxtemp_c") && !dayDetails.get("maxtemp_c").isJsonNull()
-                            ? dayDetails.get("maxtemp_c").getAsDouble() : 0.0;
-                    int dailyRain = dayDetails.has("daily_chance_of_rain") && !dayDetails.get("daily_chance_of_rain").isJsonNull()
-                            ? dayDetails.get("daily_chance_of_rain").getAsInt() : 0;
-                    String condition = dayDetails.has("condition") && dayDetails.getAsJsonObject("condition").has("text")
-                            ? dayDetails.getAsJsonObject("condition").get("text").getAsString() : "";
-                    int cityUv = dayDetails.has("uv") && !dayDetails.get("uv").isJsonNull()
-                            ? dayDetails.get("uv").getAsInt() : 0;
+                    // Extract weather details
+                    double temperature = dayDetails.has("avgtemp_c") ? dayDetails.get("avgtemp_c").getAsDouble() : 0.0;
+                    double humidity = dayDetails.has("avghumidity") ? dayDetails.get("avghumidity").getAsDouble() : 0.0;
+                    double precipitation = dayDetails.has("totalprecip_mm") ? dayDetails.get("totalprecip_mm").getAsDouble() : 0.0;
+                    double windKPH = dayDetails.has("maxwind_kph") ? dayDetails.get("maxwind_kph").getAsDouble() : 0.0;
+                    double minTemp = dayDetails.has("mintemp_c") ? dayDetails.get("mintemp_c").getAsDouble() : 0.0;
+                    double maxTemp = dayDetails.has("maxtemp_c") ? dayDetails.get("maxtemp_c").getAsDouble() : 0.0;
+                    int dailyRain = dayDetails.has("daily_chance_of_rain") ? dayDetails.get("daily_chance_of_rain").getAsInt() : 0;
+                    String condition = dayDetails.has("condition") ? dayDetails.getAsJsonObject("condition").get("text").getAsString() : "";
+                    int cityUv = dayDetails.has("uv") ? dayDetails.get("uv").getAsInt() : 0;
 
                     Weather weather = new Weather(cityName, temperature, humidity, precipitation, date, windKPH, minTemp, maxTemp, dailyRain, condition, cityUv);
                     weatherList.add(weather);
@@ -154,26 +152,42 @@ public class WeatherController {
         return weatherList;
     }
 
+    /**
+     * Shows detailed weather info for the selected item in the table.
+     */
     @FXML
     private void weatherDetailsByDate(ActionEvent event) {
         Weather selectedWeather = weatherTable.getSelectionModel().getSelectedItem();
         if (selectedWeather != null) {
-            app.showDetailView(selectedWeather);
+            app.showDetailView(selectedWeather);  // Show detailed weather view
         } else {
             showFeedback("No weather data selected.");
         }
     }
 
+    /**
+     * Displays a feedback message to the user.
+     *
+     * @param message the feedback message
+     */
     private void showFeedback(String message) {
         feedbackLabel.setText(message);
         feedbackLabel.setVisible(true);
     }
 
+    /**
+     * Hides the feedback message.
+     */
     private void hideFeedback() {
         feedbackLabel.setVisible(false);
     }
 
-    public void setApp(HelloApplication app) {
-        this.app = app;
+    /**
+     * Sets the reference to the main application.
+     *
+     * @param weatherApp the main application instance
+     */
+    public void setWeatherApp(HelloApplication weatherApp) {
+        this.app = weatherApp;
     }
 }
